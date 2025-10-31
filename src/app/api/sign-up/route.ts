@@ -7,7 +7,7 @@ export const POST = async ( request : Request) => {
     await dbConnect();
 
     try {
-        const {username, email, password} = await request.json()
+        const {name, username, email, password} = await request.json()
 
         const existingUserByUsername = await UserModel.findOne({
             username,
@@ -51,6 +51,7 @@ export const POST = async ( request : Request) => {
             expiryDate.setMinutes(expiryDate.getMinutes() + 10)
 
             const createUser = new UserModel({
+                name,
                 username,
                 email,
                 password: hashedPassword,
@@ -86,7 +87,7 @@ export const POST = async ( request : Request) => {
         console.error("Error While Creating User in Sign-Up Route !",error);
         return Response.json({
             success: false,
-            message : "Error While Creating the User !"
+            message : "Error While Creating the User !",error
         },{
             status: 500
         })
